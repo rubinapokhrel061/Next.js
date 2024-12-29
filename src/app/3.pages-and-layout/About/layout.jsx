@@ -1,3 +1,3 @@
-export default function AboutLayout() {
-  return <> About Layout</>;
+export default function AboutLayout({ children }) {
+  return <> {children}</>;
 }
