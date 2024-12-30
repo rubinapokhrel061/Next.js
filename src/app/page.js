@@ -17,6 +17,8 @@ export default function Home() {
         Home
       </button>
       <br />
+      <Link href={"/admin2"}>Gallery</Link>
+      <br />
       <Link href={"/2.linking-and-navigating/contact/986"}>Click Me</Link>
     </div>
   );
