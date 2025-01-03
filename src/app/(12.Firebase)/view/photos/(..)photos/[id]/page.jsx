@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { use } from "react";
 
 import { useRouter } from "next/navigation";
-import Modal from "../../../../../../../components/ModalContainer";
+import Modal from "@components/ModalContainer";
 import axios from "axios";
 export default function PhotoModal({ params }) {
   const [photos, setPhotos] = useState([]);
