@@ -1,6 +1,8 @@
 "use client";
 import axios from "axios";
 import { useState } from "react";
+import New from "../_component/New";
+import Home from "../_component/home/page";
 
 export default function AddPhoto() {
   const [data, setData] = useState({
@@ -96,6 +98,8 @@ export default function AddPhoto() {
           Add Photo
         </button>
       </form>
+      <New />
+      <Home />
     </>
   );
 }
