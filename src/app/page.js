@@ -25,6 +25,7 @@
 // }
 
 // //Data Fetching on the Server with Fetch API
+
 // export async function getData() {
 //   //{cache:"no-cache"}
 //   const res = await fetch("https://dog.ceo/api/breeds/image/random", {
@@ -48,11 +49,12 @@
 // }
 
 //Data fetching on the Client using third party libraries SWR(react hook for data fetching)
+
 //SWR is lightweight ,realTime,suspense,pagination,SSR(serverside rendering)/SSG(static side generation) ready ,Typescript Ready etc
 //npm i swr
 
-"use client";
-import useSWR from "swr";
+// "use client";
+// import useSWR from "swr";
 // export function getData() {
 //   const fetcher = (url) => fetch(url).then((r) => r.json());
 //   const { data, error, isLoading } = useSWR(
@@ -63,29 +65,60 @@ import useSWR from "swr";
 //   return data;
 // }
 
-export async function fetcher(url) {
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw Error("no response found");
-  }
-  return res.json();
-}
+// export async function fetcher(url) {
+//   const res = await fetch(url);
+//   if (!res.ok) {
+//     throw Error("no response found");
+//   }
+//   return res.json();
+// }
+
+// export default function Home() {
+//   // const data = getData();
+//   const { data, error, isLoading, isValidating, mutate } = useSWR(
+//     "https://dog.ceo/api/breeds/image/random",
+//     fetcher,
+//     { refreshInterval: 1000 }
+//   );
+
+//   if (error) throw "Error";
+//   if (isLoading) return <>loading...</>;
+
+//   return (
+//     <div className="">
+//       <h1>DAta fetching</h1>
+//       <img src={data?.message} alt="dog-api" />
+//     </div>
+//   );
+// }
+
+"use client";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
-  // const data = getData();
-  const { data, error, isLoading, isValidating, mutate } = useSWR(
-    "https://dog.ceo/api/breeds/image/random",
-    fetcher,
-    { refreshInterval: 1000 }
-  );
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["dogAPI"],
+    queryFn: () =>
+      fetch("https://dog.ceo/api/breeds/image/random")
+        .then((res) => res.json())
+        .catch((err) => {
+          throw new Error("Failed to fetch dog image");
+        }),
+    refetchInterval: 2000,
+  });
 
-  if (error) throw "Error";
-  if (isLoading) return <>loading...</>;
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="">
-      <h1>DAta fetching</h1>
-      <img src={data?.message} alt="dog-api" />
+    <div>
+      <h1>Data Fetching</h1>
+      {data && <img src={data?.message} alt="dog-api" />}
     </div>
   );
 }
