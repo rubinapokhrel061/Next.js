@@ -24,20 +24,64 @@
 //   );
 // }
 
-export async function getData() {
-  //{cache:"no-cache"}
-  const res = await fetch("https://dog.ceo/api/breeds/image/random", {
-    cache: "no-store",
-    next: { revalidate: 60 }, //60seconds
-  });
+// //Data Fetching on the Server with Fetch API
+// export async function getData() {
+//   //{cache:"no-cache"}
+//   const res = await fetch("https://dog.ceo/api/breeds/image/random", {
+//     cache: "no-store",
+//     next: { revalidate: 60 }, //60seconds
+//   });
+//   if (!res.ok) {
+//     throw Error("cannot get data on fetch !");
+//   }
+//   return res.json();
+// }
+
+// export default async function Home() {
+//   const data = await getData();
+//   return (
+//     <div className="">
+//       <h1>DAta fetching</h1>
+//       <img src={data?.message} alt="dog-api" />
+//     </div>
+//   );
+// }
+
+//Data fetching on the Client using third party libraries SWR(react hook for data fetching)
+//SWR is lightweight ,realTime,suspense,pagination,SSR(serverside rendering)/SSG(static side generation) ready ,Typescript Ready etc
+//npm i swr
+
+"use client";
+import useSWR from "swr";
+// export function getData() {
+//   const fetcher = (url) => fetch(url).then((r) => r.json());
+//   const { data, error, isLoading } = useSWR(
+//     "https://dog.ceo/api/breeds/image/random",
+//     fetcher
+//   );
+
+//   return data;
+// }
+
+export async function fetcher(url) {
+  const res = await fetch(url);
   if (!res.ok) {
-    throw Error("cannot get data on fetch !");
+    throw Error("no response found");
   }
   return res.json();
 }
 
-export default async function Home() {
-  const data = await getData();
+export default function Home() {
+  // const data = getData();
+  const { data, error, isLoading, isValidating, mutate } = useSWR(
+    "https://dog.ceo/api/breeds/image/random",
+    fetcher,
+    { refreshInterval: 1000 }
+  );
+
+  if (error) throw "Error";
+  if (isLoading) return <>loading...</>;
+
   return (
     <div className="">
       <h1>DAta fetching</h1>
