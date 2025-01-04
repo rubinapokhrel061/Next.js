@@ -94,6 +94,8 @@
 
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import Script from "next/script";
+// import { openFullscreen } from "../../public/fullscreen";
 
 export default function Home() {
   const { isLoading, isError, data, error } = useQuery({
@@ -116,9 +118,25 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <h1>Data Fetching</h1>
-      {data && <img src={data?.message} alt="dog-api" />}
-    </div>
+    <>
+      {/* <h1>Data Fetching</h1> */}
+      {/* {data && <img src={data?.message} alt="dog-api" />} */}
+      <Script src="fullscreen.js" onLoad={() => console.log("success")} />
+      <div>
+        <div className="flex justify-between gap-4 m-4">
+          <h2> Video</h2>
+          <button
+            onClick={openFullscreen}
+            className="px-4 py-2 bg-slate-400 rounded-lg"
+          >
+            {" "}
+            full screen
+          </button>
+        </div>
+        <video src="rain.mp4" width="100%" controls id="myVideo">
+          <source src="rain.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </>
   );
 }
