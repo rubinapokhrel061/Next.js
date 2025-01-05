@@ -2,8 +2,6 @@
 // import Link from "next/link";
 // import { useRouter } from "next/navigation";
 
-
-
 // export default function Home() {
 //   const router = useRouter();
 //   return (
@@ -146,10 +144,51 @@
 // }
 
 //seo
-import Link from "next/link";
-export default function Home (){
+// import Link from "next/link";
+// export default function Home (){
+//   return (
+//     <>
+//     <Link href={"/about"}>about</Link></>
+//   )
+// }
+
+// Lazy Loading
+"use client";
+import dynamic from "next/dynamic";
+import { useState, Suspense, lazy } from "react";
+
+const ComponentA = dynamic(() => import("@components/componentA"));
+const ComponentB = lazy(() => import("@components/componentB"), {
+  loading: () => <>Please wait for component B.....</>,
+});
+const ComponentC = dynamic(() => import("@components/componentC"), {
+  ssr: false,
+});
+export default function Home() {
+  const [show, setShow] = useState(false);
   return (
     <>
-    <Link href={"/about"}>about</Link></>
-  )
+      <div className="p-20">
+        {/* client bundle separately loaded */}
+        {/* loaded sever side */}
+        <ComponentA />
+
+        {/* show or hide component when neded */}
+        <button
+          className="rounded px-3 py-1 bg-red-500 m-4"
+          onClick={() => setShow(!show)}
+        >
+          Show
+        </button>
+        {show && (
+          <Suspense fallback={<>loading....</>}>
+            <ComponentB />
+          </Suspense>
+        )}
+
+        {/* dirctly loaded to client side */}
+        <ComponentC />
+      </div>
+    </>
+  );
 }
