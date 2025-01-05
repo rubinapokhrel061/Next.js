@@ -56,6 +56,33 @@ export const authOptions = {
     signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 6 * 24 * 365,
+  },
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+    
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
+    },
+    async session({ session, user, token }) {
+      // console.log("session", session, "user",user, "token",token);
+      if (token?.user) {
+        session.user = token.user;
+      }
+      return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      // console.log("user",  user,"token",token);
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+  },
 };
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

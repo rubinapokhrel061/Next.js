@@ -13,10 +13,10 @@ export default async function Server() {
   }
 
   return (
-    <div>
+    <div className="max-w-2xl">
       <p>Congratulations! Welcome to the server page.</p>
       <h1>User Info:</h1>
-      <pre>{JSON.stringify(session)}</pre>
+      <div className="max-w-md flex flex-wrap">{JSON.stringify(session)}</div>
     </div>
   );
 }

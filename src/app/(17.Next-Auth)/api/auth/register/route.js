@@ -9,7 +9,7 @@ export async function POST(request) {
     if (email.length === 0) throw new Error("email must not be empty");
     if (password.length === 0) throw new Error("password must not be empty");
     const res = await createUserWithEmailAndPassword(auth, email, password);
-    const user = res;
+    const user = res?.user;
 
     return NextResponse.json({
       message: "Successfully Registered!!",

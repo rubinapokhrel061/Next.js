@@ -8,7 +8,11 @@ export default function client() {
       <div>
         <p>Congratulations! Welcome to the client page.</p>
         <h1>User Info:</h1>
-        <pre>{JSON.stringify(session)}</pre>
+        <div className="max-w-2xl">
+          <pre className="whitespace-pre-wrap break-words">
+            {JSON.stringify(session, null, 2)}
+          </pre>
+        </div>
       </div>
     </>
   );
