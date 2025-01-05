@@ -153,41 +153,85 @@
 // }
 
 // Lazy Loading
-"use client";
-import dynamic from "next/dynamic";
-import { useState, Suspense, lazy } from "react";
+// "use client";
+// import dynamic from "next/dynamic";
+// import { useState, Suspense, lazy } from "react";
 
-const ComponentA = dynamic(() => import("@components/componentA"));
-const ComponentB = lazy(() => import("@components/componentB"), {
-  loading: () => <>Please wait for component B.....</>,
-});
-const ComponentC = dynamic(() => import("@components/componentC"), {
-  ssr: false,
-});
+// const ComponentA = dynamic(() => import("@components/componentA"));
+// const ComponentB = lazy(() => import("@components/componentB"), {
+//   loading: () => <>Please wait for component B.....</>,
+// });
+// const ComponentC = dynamic(() => import("@components/componentC"), {
+//   ssr: false,
+// });
+// export default function Home() {
+//   const [show, setShow] = useState(false);
+//   return (
+//     <>
+//       <div className="p-20">
+
+//         {/* client bundle separately loaded */}
+//         {/* loaded sever side */}
+//         <ComponentA />
+
+//         {/* show or hide component when neded */}
+//         <button
+//           className="rounded px-3 py-1 bg-red-500 m-4"
+//           onClick={() => setShow(!show)}
+//         >
+//           Show
+//         </button>
+//         {show && (
+//           <Suspense fallback={<>loading....</>}>
+//             <ComponentB />
+//           </Suspense>
+//         )}
+
+//         {/* dirctly loaded to client side */}
+//         <ComponentC />
+//       </div>
+//     </>
+//   );
+// }
+
+//Mastering getSession, useSession, and Middleware
+"use client";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+
 export default function Home() {
-  const [show, setShow] = useState(false);
+  const { data: session } = useSession();
   return (
     <>
-      <div className="p-20">
-        {/* client bundle separately loaded */}
-        {/* loaded sever side */}
-        <ComponentA />
-
-        {/* show or hide component when neded */}
-        <button
-          className="rounded px-3 py-1 bg-red-500 m-4"
-          onClick={() => setShow(!show)}
+      <div className="flex gap-10 p-20">
+        <Link
+          href={"/login"}
+          className="rounded px-3 py-1 text-white bg-red-500 m-4"
         >
-          Show
-        </button>
-        {show && (
-          <Suspense fallback={<>loading....</>}>
-            <ComponentB />
-          </Suspense>
+          login
+        </Link>
+        {session?.user && (
+          <>
+            <Link
+              href={"/server"}
+              className="rounded px-3 py-1 text-white bg-red-500 m-4"
+            >
+              server
+            </Link>
+            <Link
+              href={"/client"}
+              className="rounded px-3 py-1 text-white bg-red-500 m-4"
+            >
+              client
+            </Link>
+            <Link
+              href={"/api/auth/signout"}
+              className="rounded px-3 py-1 text-white bg-red-500 m-4"
+            >
+              logout
+            </Link>
+          </>
         )}
-
-        {/* dirctly loaded to client side */}
-        <ComponentC />
       </div>
     </>
   );
